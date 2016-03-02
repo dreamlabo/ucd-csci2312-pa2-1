@@ -14,7 +14,7 @@ namespace Clustering {
 
     public:
         Point(int);
-        Point(int, double *);
+        //Point(int, double *);
 
         // Big three: cpy ctor, overloaded operator=, dtor
         Point(const Point &);
@@ -22,13 +22,14 @@ namespace Clustering {
         ~Point();
 
         // Accessors & mutators
-        int getId() const;
-        int getDims() const;
+        int getId() const;     //declared inline
+        int getDims() const;// {return __dim;}   //declared inline
         void setValue(int, double);
         double getValue(int) const;
 
         // Functions
         double distanceTo(const Point &) const;
+
 
         // Overloaded operators
 
@@ -37,8 +38,8 @@ namespace Clustering {
         Point &operator/=(double);
         const Point operator*(double) const; // prevent (p1 * 2) = p2;
         const Point operator/(double) const; // p3 = p2 / 2;
-
         double &operator[](int index);
+
 
         // Friends
         friend Point &operator+=(Point &, const Point &);
@@ -48,7 +49,6 @@ namespace Clustering {
 
         friend bool operator==(const Point &, const Point &);
         friend bool operator!=(const Point &, const Point &);
-
         friend bool operator<(const Point &, const Point &);
         friend bool operator>(const Point &, const Point &);
         friend bool operator<=(const Point &, const Point &);
@@ -60,3 +60,4 @@ namespace Clustering {
 
 }
 #endif //CLUSTERING_POINT_H
+

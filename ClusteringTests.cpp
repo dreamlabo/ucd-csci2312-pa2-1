@@ -1,5 +1,4 @@
-// ClusteringTests.cpp
-//
+ //ClusteringTests.cpp//
 // Created by Ivo Georgiev on 10/29/15.
 //
 
@@ -7,6 +6,7 @@
 #include <cassert>
 #include <iomanip>
 #include <fstream>
+#include <limits>
 
 #include "ClusteringTests.h"
 #include "Point.h"
@@ -120,7 +120,7 @@ void test_point_id(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// setValue, getValue, operator[]
+//// setValue, getValue, operator[]
 void test_point_getsetelem(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -140,8 +140,8 @@ void test_point_getsetelem(ErrorContext &ec, unsigned int numRuns) {
             pass = true;
             for (int i = 0; i < 50; i ++) {
                 pass = pass &&
-                        (p.getValue(i) == 0.0) &&
-                        (p[i] == 0.0);
+                       (p.getValue(i) == 0.0) &&
+                       (p[i] == 0.0);
             }
             ec.result(pass);
         }
@@ -159,8 +159,8 @@ void test_point_getsetelem(ErrorContext &ec, unsigned int numRuns) {
             pass = true;
             for (int i = 0; i < 20; i ++)
                 pass = pass &&
-                        (p.getValue(i) == (13.43 * i * i + 4.567 * i + 1.234567)) &&
-                        (p[i] == (13.43 * i * i + 4.567 * i + 1.234567));
+                       (p.getValue(i) == (13.43 * i * i + 4.567 * i + 1.234567)) &&
+                       (p[i] == (13.43 * i * i + 4.567 * i + 1.234567));
             ec.result(pass);
         }
 
@@ -184,7 +184,7 @@ void test_point_getsetelem(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// Copy constructor
+//// Copy constructor
 void test_point_copying(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -229,7 +229,7 @@ void test_point_copying(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator=
+//// operator=
 void test_point_assignment(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -276,7 +276,7 @@ void test_point_assignment(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator==, operator!=
+//// operator==, operator!=
 void test_point_equality(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -334,8 +334,8 @@ void test_point_equality(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator<, operator<=, operator>, operator>=
-// (pseudo-lexicographic comparison)
+//// operator<, operator<=, operator>, operator>=
+//// (pseudo-lexicographic comparison)
 void test_point_comparison(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -499,7 +499,7 @@ void test_point_comparison(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator+=, operator-=, operator*=, operator/=
+//// operator+=, operator-=, operator*=, operator/=
 void test_point_CAO(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -773,8 +773,8 @@ void test_point_IO(ErrorContext &ec, unsigned int numRuns) {
 
 
 // - - - - - - - - - - C L U S T E R - - - - - - - - - -
-
-// Smoketest: constructor, copy constructor, destructor
+//
+//// Smoketest: constructor, copy constructor, destructor
 void test_cluster_smoketest(ErrorContext &ec) {
     bool pass;
 
@@ -815,7 +815,7 @@ void test_cluster_smoketest(ErrorContext &ec) {
     ec.result(pass);
 }
 
-// add, remove
+//// add, remove
 void test_cluster_addremove(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -898,7 +898,7 @@ void test_cluster_addremove(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// Containment
+//// Containment
 void test_cluster_contain(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -945,7 +945,7 @@ void test_cluster_contain(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// Copy constructor
+//// Copy constructor
 void test_cluster_copying(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -988,7 +988,7 @@ void test_cluster_copying(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator=
+////// operator=
 void test_cluster_assignment(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -1058,7 +1058,7 @@ void test_cluster_assignment(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// subscript (operator[])
+//// subscript (operator[])
 void test_cluster_subscript(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -1105,7 +1105,7 @@ void test_cluster_subscript(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator==, operator!=
+//// operator==, operator!=
 void test_cluster_equality(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -1144,7 +1144,7 @@ void test_cluster_equality(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// ascending pseudo-lexicographic order
+//// ascending pseudo-lexicographic order
 void test_cluster_order(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -1221,7 +1221,7 @@ void test_cluster_order(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator+=, operator-=, different rhs
+////// operator+=, operator-=, different rhs
 void test_cluster_CAO(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -1427,7 +1427,7 @@ void test_cluster_CAO(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator+, operator-, different rhs
+////// operator+, operator-, different rhs
 void test_cluster_SAO(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
@@ -1521,7 +1521,7 @@ void test_cluster_SAO(ErrorContext &ec, unsigned int numRuns) {
     }
 }
 
-// operator>>, operator<<
+////// operator>>, operator<<
 void test_cluster_IO(ErrorContext &ec, unsigned int numRuns) {
     bool pass;
 
