@@ -3,12 +3,16 @@
 //
 
 
+
 #include <cassert>
-#include <w32api/msclus.h>
+#include <string>
 #include "Point.h"
 #include "Cluster.h"
-
-
+#include <cstdlib>    //for "atof" in operator >>
+#include <fstream>
+#include <sstream>
+using std::stringstream;
+using std::string;
 namespace Clustering {
 
     LNode::LNode(const Point &p, LNodePtr n) : point(p), next(n) {
@@ -22,26 +26,26 @@ namespace Clustering {
     Cluster::Cluster(const Cluster &rightSide) {
         __size = 0;
         __points = nullptr;
-        if(rightSide.__points == nullptr){
-            assert( rightSide.__size == 0);
+        if (rightSide.__points == nullptr) {
+            assert(rightSide.__size == 0);
             __points = nullptr;
         }
-       else {
-                LNodePtr current = rightSide.__points;
+        else {
+            LNodePtr current = rightSide.__points;
 
-                while (current != nullptr) {
-                    add(current->point);
-                    current = current->next;
-                    }
-       }
+            while (current != nullptr) {
+                add(current->point);
+                current = current->next;
+            }
+        }
     }
 
 
 // Assignment operator=
     Cluster &Cluster::operator=(const Cluster &rightSide) {
-       if (this == &rightSide){
-           return *this;
-       }//prevent self assignment
+        if (this == &rightSide) {
+            return *this;
+        }//prevent self assignment
 
         LNodePtr nodePtr = __points; //to traverse the list
         LNodePtr nextNode; //to point to next node
@@ -53,13 +57,13 @@ namespace Clustering {
             __size--;
         }
         __size = 0;
-         __points = nullptr;
+        __points = nullptr;
 
         LNodePtr rightSidePtr = rightSide.__points;
         for (int i = 0; i < rightSide.getSize(); i++) {
             add(rightSidePtr->point);
 
-                rightSidePtr = rightSidePtr->next;
+            rightSidePtr = rightSidePtr->next;
 
         }
         return *this;
@@ -99,27 +103,26 @@ namespace Clustering {
         if (!__points) {  // insert into empty list
             __points = newNode;
         }
-        else if (addPoint < __points->point){ //insert at beginning of the list
+        else if (addPoint < __points->point) { //insert at beginning of the list
             newNode->next = __points;
             __points = newNode;
         }
-          else {
+        else {
             LNodePtr currentNode = __points->next, previousNode = __points; //set pointer to current and previous nodes
 
             while (true) {
-            if (currentNode == nullptr || currentNode->point > addPoint){
-                newNode->next = currentNode;
-                previousNode->next = newNode;
-                break;
-            }
-            else
-                previousNode = currentNode;
+                if (currentNode == nullptr || currentNode->point > addPoint) {
+                    newNode->next = currentNode;
+                    previousNode->next = newNode;
+                    break;
+                }
+                else
+                    previousNode = currentNode;
                 currentNode = currentNode->next;
             }
         }
-       __size++;
+        __size++;
     }
-
 
 
 // remove function
@@ -147,11 +150,11 @@ namespace Clustering {
                 previousNode = nodePtr;
                 nodePtr = nodePtr->next;
             }
-                if (nodePtr) {
-                    previousNode->next = nodePtr->next;
-                    delete nodePtr;
-                }
+            if (nodePtr) {
+                previousNode->next = nodePtr->next;
+                delete nodePtr;
             }
+        }
 
         __size--;
         return removePoint;
@@ -162,16 +165,16 @@ namespace Clustering {
 // Precondition:
 // Postcondition: a bool value (true/false) is returned
     bool Cluster::contains(const Point &point) {
-        LNodePtr  curser = __points; // to traverse the list
+        LNodePtr curser = __points; // to traverse the list
         bool contains = false;
 
         // Traverse the list, checking to see if the list contains the requested point
-        while (curser != nullptr){
+        while (curser != nullptr) {
             if (curser->point == point) {
                 contains = true;
                 break;
             }
-               curser = curser->next; // move curser
+            curser = curser->next; // move curser
         }
         return contains;
     }
@@ -186,10 +189,10 @@ namespace Clustering {
 // Precondition
 // Postcondition: a reference to the point at the requested index is returned
     const Point &Cluster::operator[](unsigned int index) const {
-      assert (index < __size);
-         LNodePtr  cursor = __points;
+        assert (index < __size);
+        LNodePtr cursor = __points;
 
-        for ( unsigned int i = 0; i < index; i++) {
+        for (unsigned int i = 0; i < index; i++) {
             assert(cursor);
             cursor = cursor->next;
         }
@@ -202,7 +205,7 @@ namespace Clustering {
 // Adds a point to an existing cluster.
 // Precondition:
 // Postcondition: A new point is added to an existing Cluster.
-        Cluster &Cluster::operator+=(const Point &point) {
+    Cluster &Cluster::operator+=(const Point &point) {
         add(point);
         return *this;
     }
@@ -223,13 +226,13 @@ namespace Clustering {
     Cluster &Cluster::operator+=(const Cluster &cluster) {
         Cluster tempCluster;  // create new cluster to store the union of two cluster
 
-        while (__points != nullptr){
+        while (__points != nullptr) {
             tempCluster.add(__points->point);
             __points = __points->next;
         }
         LNodePtr cursor = cluster.__points; // to traverse the list
-        while (cursor != nullptr){
-            if (!tempCluster.contains(cursor->point)){
+        while (cursor != nullptr) {
+            if (!tempCluster.contains(cursor->point)) {
                 tempCluster.add(cursor->point);
             }
             cursor = cursor->next;
@@ -243,14 +246,14 @@ namespace Clustering {
 // Precondition:
 // Postcondition: a new cluster created and returned from the (asymmetric) difference of two cluster.
     Cluster &Cluster::operator-=(const Cluster &cluster) {
-       // Cluster tempCluster;
+        // Cluster tempCluster;
         LNodePtr cursor = cluster.__points;
 
-        while (cursor != nullptr){
-           if (contains(cursor->point)){
-             remove(cursor->point);
+        while (cursor != nullptr) {
+            if (contains(cursor->point)) {
+                remove(cursor->point);
             }
-             cursor = cursor->next;
+            cursor = cursor->next;
         }
 
         return *this;
@@ -267,16 +270,15 @@ namespace Clustering {
 
 // Overloaded << operator
     std::ostream &operator<<(std::ostream &ostream, const Cluster &cluster) {
-            assert(cluster.__points != nullptr);
-            LNodePtr target = cluster.__points;
+        assert(cluster.__points != nullptr);
+        LNodePtr cursor = cluster.__points;
 
-                while (target != nullptr) {
-                        ostream << target->point;
-                        ostream << std::endl;
-                        target = target->next;
-                    }
-                 ostream << std::endl;
-            return ostream;
+        while (cursor != nullptr) {    // print the rest of the points
+            ostream << cursor->point << std::endl;
+            ostream << std::endl;
+            cursor = cursor->next;
+        }
+        return ostream;
     }
 
 
@@ -286,7 +288,10 @@ namespace Clustering {
 // Postcondition: A cluster is read from a file, and a new cluster is created form that file.
     std::istream &operator>>(std::istream &istream, Cluster &cluster) {
         return istream;
+
     }
+
+
 
 // Friends: Comparison
 
@@ -414,6 +419,36 @@ namespace Clustering {
     }
 
 
+// operator >>
+//        std::ifstream csv("points.csv");
+//        std::string line;
+//
+//        if (csv.is_open()) {
+//
+//            while (getline(csv,line)) {
+//
+//                std::cout << "Line: " << line << std::endl;
+//
+//                std::stringstream lineStream(line);
+//                std::string value;
+//                double d;
+//                Point p(5);
+//
+//                int i = 1;
+//                while (std::getline(lineStream, value, ',')) {
+//                  //  d = std::stod(value);
+//
+//                    std::cout << "Value: " << d << std::endl;
+//
+//                    p.setValue(i++, d);
+//                }
+//                std::cout << "Point: " << p << std::endl;
+//            }
+//        }
+//        csv.close();
+
+//        return istream;
+//    }
 
 
 
